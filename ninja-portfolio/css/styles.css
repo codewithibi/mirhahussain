@@ -162,28 +162,6 @@ ul {
     width: 100%;
 }
 
-.auth-link {
-    background-color: var(--primary-color);
-    padding: 0.5rem 1rem !important;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.auth-link:hover {
-    background-color: var(--hover-color);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(230, 0, 0, 0.3);
-    color: var(--text-color) !important;
-}
-
-.auth-link::after {
-    display: none !important;
-}
-
-.auth-link i {
-    margin-right: 5px;
-}
-
 .menu-toggle {
     display: none;
     flex-direction: column;

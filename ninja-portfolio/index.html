@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -32,7 +31,6 @@
                     <li><a href="#home" class="active">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="/auth" class="auth-link"><i class="fas fa-user"></i> Sign In</a></li>
                 </ul>
             </nav>
         </div>
@@ -90,7 +88,8 @@
                     <p><i class="fas fa-envelope"></i> <a href="mailto:mishimaykz1000@gmail.com?subject=Contact from Portfolio Website">mishimaykz1000@gmail.com</a></p>
                     <p><i class="fas fa-phone"></i> +1 234 567 890</p>
                     <p><i class="fas fa-map-marker-alt"></i> Ninja Dojo, Shinobi City</p>
-                    <p class="note"><i class="fas fa-info-circle"></i> Your message will be securely stored in our Supabase database.</p>
+                    <p class="note"><i class="fas fa-info-circle"></i> If the form doesn't work, please click on my email address to send a message directly!</p>
+                    <p class="note warning"><i class="fas fa-exclamation-triangle"></i> You may be seeing "Failed to fetch" errors if you're viewing this site locally without a server. Try using the email link above instead.</p>
                     <div class="social-links">
                         <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
@@ -99,7 +98,13 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="ba8da0c0-9d33-467c-aa63-359d30ccbb30">
+                        <input type="hidden" name="from_name" value="Ninja Portfolio Contact Form">
+                        <input type="hidden" name="reply_to" value="{email}"> <!-- This will use the submitter's email -->
+                        <input type="hidden" name="subject" value="New Contact Form Submission from {name}">
+                        <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                         <div class="form-group">
                             <input type="text" id="name" name="name" placeholder="Your Name" required>
                             <label for="name">Your Name</label>
@@ -109,7 +114,7 @@
                             <label for="email">Your Email</label>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                            <input type="text" id="subject" name="subject_custom" placeholder="Subject" required>
                             <label for="subject">Subject</label>
                         </div>
                         <div class="form-group">

@@ -1,10 +1,5 @@
 // Wait for the DOM to load
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Supabase client
-    const supabaseUrl = 'https://ywlxsnsxolmaymjqhbjx.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3bHhzbnN4b2xtYXltanFoYmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MTgyMzEsImV4cCI6MjA2ODk5NDIzMX0.tY4TocIZWHrCwaW1thX-76VvJzY3Qv3Gf-s-_p7wCp4';
-    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-    
     // Mobile navigation toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -107,19 +102,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.addEventListener('scroll', highlightNavLink);
     
-    // Form handling with Supabase
+    // Form handling with Web3Forms
     const contactForm = document.getElementById('contactForm');
     const formStatus = document.getElementById('form-status');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
+            const formData = new FormData(contactForm);
             const submitBtn = contactForm.querySelector('.submit-btn');
             
             // Change button text while submitting
@@ -130,75 +121,82 @@ document.addEventListener('DOMContentLoaded', function() {
             formStatus.innerHTML = '<div class="sending-message">Sending your message...</div>';
             formStatus.style.display = 'block';
             
-            // Check if we have a network connection
+            // Show network status
+            formStatus.innerHTML = '<div class="sending-message">Checking network connection...</div>';
+
+            // First check if we have a network connection
             if (!navigator.onLine) {
                 formStatus.innerHTML = '<div class="error-message">You appear to be offline. Please check your internet connection and try again.</div>';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
                 return;
             }
+
+            formStatus.innerHTML = '<div class="sending-message">Sending your message...</div>';
             
+            // Submit the form using traditional method as fallback
             try {
-                // Insert the form data into Supabase
-                const { data, error } = await supabaseClient
-                    .from('contact_messages')
-                    .insert([
-                        { 
-                            name: name,
-                            email: email,
-                            subject: subject,
-                            message: message,
-                            created_at: new Date().toISOString()
+                // Use XMLHttpRequest as a fallback to fetch
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', contactForm.action, true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.timeout = 15000; // 15 seconds timeout
+                
+                xhr.onload = function() {
+                    try {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            const data = JSON.parse(xhr.responseText);
+                            console.log("Form submission response:", data);
+                            
+                            if (data.success) {
+                                formStatus.innerHTML = '<div class="success-message">Message sent successfully! We will get back to you soon. Check your spam folder if you don\'t see the email.</div>';
+                                contactForm.reset();
+                                console.log("Form submitted successfully with ID:", data.message_id);
+                            } else {
+                                formStatus.innerHTML = '<div class="error-message">Something went wrong! Error: ' + (data.message || "Unknown error") + '</div>';
+                                console.error("Form submission error:", data);
+                            }
+                        } else {
+                            formStatus.innerHTML = '<div class="error-message">Server error: ' + xhr.status + ' - ' + xhr.statusText + '</div>';
+                            console.error("Server error:", xhr.status, xhr.statusText);
                         }
-                    ]);
-                
-                if (error) {
-                    console.error("Supabase error:", error);
-                    
-                    // Provide more specific error messages based on the error code
-                    if (error.code === "42P01") {
-                        formStatus.innerHTML = '<div class="error-message">Database table not found. Please make sure you\'ve set up the contact_messages table in Supabase.</div>';
-                    } else if (error.code === "23505") {
-                        formStatus.innerHTML = '<div class="error-message">A duplicate entry was detected.</div>';
-                    } else if (error.code === "23502") {
-                        formStatus.innerHTML = '<div class="error-message">Please fill in all required fields.</div>';
-                    } else if (error.code === "42501" || error.code === "42803") {
-                        formStatus.innerHTML = '<div class="error-message">Permission denied. Please check your Supabase RLS policies.</div>';
-                    } else if (error.message.includes("Failed to fetch")) {
-                        formStatus.innerHTML = '<div class="error-message">Network error. Please check your internet connection or if Supabase is accessible.</div>';
-                    } else {
-                        formStatus.innerHTML = '<div class="error-message">Error: ' + error.message + '</div>';
+                    } catch (err) {
+                        formStatus.innerHTML = '<div class="error-message">Error processing response: ' + err.message + '</div>';
+                        console.error("Error processing response:", err);
                     }
                     
-                    throw error;
-                }
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                };
                 
-                // Success
-                formStatus.innerHTML = '<div class="success-message">Message sent successfully! We will get back to you soon.</div>';
-                contactForm.reset();
-                console.log("Form submitted successfully to Supabase");
+                xhr.ontimeout = function() {
+                    formStatus.innerHTML = '<div class="error-message">Request timed out. Server may be down or your connection is slow.</div>';
+                    console.error("Request timed out");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                };
+                
+                xhr.onerror = function() {
+                    formStatus.innerHTML = '<div class="error-message">Network error occurred. This could be due to CORS restrictions or the API being unavailable.</div>';
+                    console.error("Network error occurred");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                };
+                
+                xhr.send(formData);
             } catch (error) {
-                console.error("Form submission error:", error);
-                
-                // Handle network or other errors not caught by Supabase
-                if (!formStatus.querySelector('.error-message')) {
-                    if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
-                        formStatus.innerHTML = '<div class="error-message">Network error. Please check your internet connection or if Supabase is accessible.</div>';
-                    } else {
-                        formStatus.innerHTML = '<div class="error-message">Error: ' + error.message + '</div>';
-                    }
-                }
-            } finally {
+                console.error("Form submission exception:", error);
+                formStatus.innerHTML = '<div class="error-message">Error: ' + error.message + '</div>';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
-                
-                // Hide status message after 5 seconds on success
-                setTimeout(() => {
-                    if (formStatus.querySelector('.success-message')) {
-                        formStatus.style.display = 'none';
-                    }
-                }, 5000);
             }
+            
+            // Hide status message after 5 seconds on success
+            setTimeout(() => {
+                if (formStatus.querySelector('.success-message')) {
+                    formStatus.style.display = 'none';
+                }
+            }, 5000);
         });
     }
     
