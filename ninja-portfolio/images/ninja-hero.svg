@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <!-- Dark background -->
+  <rect width="1200" height="800" fill="#0a0a0a" />
+  
+  <!-- Abstract ninja pattern -->
+  <g opacity="0.2">
+    <!-- Mountains silhouette -->
+    <path d="M0 600 L200 300 L400 500 L600 200 L800 400 L1000 250 L1200 450 L1200 800 L0 800 Z" fill="#333333" />
+    
+    <!-- Ninja silhouette -->
+    <path d="M700 600 C750 550 800 600 850 550 L900 600 L900 700 L700 700 Z" fill="#e60000" />
+    
+    <!-- Throwing stars pattern -->
+    <g fill="#666666">
+      <path d="M100 100 L120 80 L100 60 L80 80 Z" />
+      <path d="M300 200 L320 180 L300 160 L280 180 Z" />
+      <path d="M500 150 L520 130 L500 110 L480 130 Z" />
+      <path d="M750 300 L770 280 L750 260 L730 280 Z" />
+      <path d="M900 100 L920 80 L900 60 L880 80 Z" />
+      <path d="M1100 200 L1120 180 L1100 160 L1080 180 Z" />
+    </g>
+    
+    <!-- Sword outline -->
+    <path d="M400 700 L600 300 L620 300 L620 320 L430 720 Z" fill="#999999" />
+  </g>
+  
+  <!-- Dynamic lines -->
+  <g stroke="#e60000" stroke-width="2" fill="none">
+    <path d="M0 100 C200 50, 400 150, 600 100 S 900 150, 1200 100" opacity="0.3" />
+    <path d="M0 200 C300 150, 600 250, 900 200 S 1000 250, 1200 200" opacity="0.2" />
+    <path d="M0 300 C200 250, 400 350, 600 300 S 900 350, 1200 300" opacity="0.1" />
+  </g>
+</svg> 

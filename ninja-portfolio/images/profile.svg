@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Background -->
+  <rect width="400" height="400" fill="#1a1a1a" />
+  
+  <!-- Profile silhouette -->
+  <circle cx="200" cy="150" r="80" fill="#333333" />
+  <path d="M100 400 C100 300 300 300 300 400 Z" fill="#333333" />
+  
+  <!-- Headband -->
+  <path d="M120 150 C120 120 280 120 280 150" stroke="#e60000" stroke-width="10" fill="none" />
+  
+  <!-- Ninja mask outline -->
+  <path d="M150 180 C150 140 250 140 250 180" stroke="#e60000" stroke-width="2" fill="none" />
+  
+  <!-- Accent elements -->
+  <circle cx="170" cy="140" r="10" fill="#e60000" />
+  <circle cx="230" cy="140" r="10" fill="#e60000" />
+  
+  <!-- Ninja stars background elements -->
+  <g fill="#e60000" opacity="0.3">
+    <path d="M50 50 L60 40 L50 30 L40 40 Z" />
+    <path d="M350 50 L360 40 L350 30 L340 40 Z" />
+    <path d="M50 350 L60 340 L50 330 L40 340 Z" />
+    <path d="M350 350 L360 340 L350 330 L340 340 Z" />
+  </g>
+</svg> 

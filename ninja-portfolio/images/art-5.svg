@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#1a1a1a" />
+  
+  <!-- Paper texture -->
+  <rect width="400" height="300" fill="#333333" opacity="0.05" />
+  
+  <!-- Ink drawing elements -->
+  <g stroke="#f2f2f2" stroke-width="1" fill="none">
+    <!-- Mountain outlines -->
+    <path d="M0 150 L50 80 L100 120 L150 70 L200 150 L250 90 L300 130 L350 60 L400 120 L400 300 L0 300 Z" 
+          stroke-width="2" opacity="0.9" />
+    
+    <!-- Tree line -->
+    <path d="M50 200 L50 150 M45 160 L55 160 M40 170 L60 170 M37 180 L63 180 M35 190 L65 190" 
+          stroke-width="0.7" opacity="0.8" />
+    <path d="M90 210 L90 160 M85 170 L95 170 M80 180 L100 180 M77 190 L103 190 M75 200 L105 200" 
+          stroke-width="0.7" opacity="0.8" />
+    <path d="M140 190 L140 140 M135 150 L145 150 M130 160 L150 160 M127 170 L153 170 M125 180 L155 180" 
+          stroke-width="0.7" opacity="0.8" />
+    <path d="M300 180 L300 130 M295 140 L305 140 M290 150 L310 150 M287 160 L313 160 M285 170 L315 170" 
+          stroke-width="0.7" opacity="0.8" />
+    <path d="M350 200 L350 150 M345 160 L355 160 M340 170 L360 170 M337 180 L363 180 M335 190 L365 190" 
+          stroke-width="0.7" opacity="0.8" />
+    
+    <!-- Ninja on mountain peak -->
+    <circle cx="200" cy="110" r="8" fill="#1a1a1a" stroke="#f2f2f2" />
+    <path d="M200 118 L200 130 M190 122 L210 122" stroke-width="1" />
+    <path d="M195 110 L198 107 M205 110 L202 107" stroke-width="0.5" /> <!-- Eyes -->
+    
+    <!-- Spirit elements -->
+    <path d="M170 90 C180 70, 190 80, 200 60 S 220 70, 230 90" stroke-width="0.5" opacity="0.6" />
+    <path d="M160 100 C170 80, 180 90, 190 70 S 210 80, 220 100" stroke-width="0.5" opacity="0.6" />
+    <path d="M180 80 C190 60, 200 70, 210 50 S 230 60, 240 80" stroke-width="0.5" opacity="0.6" />
+    
+    <!-- Red ink accents -->
+    <g stroke="#e60000" fill="none">
+      <circle cx="200" cy="30" r="15" opacity="0.7" /> <!-- Red sun -->
+      <path d="M185 30 L215 30 M200 15 L200 45" stroke-width="0.7" opacity="0.5" /> <!-- Sun rays -->
+      
+      <!-- Traditional stamp/signature -->
+      <rect x="330" y="250" width="20" height="20" stroke="#e60000" fill="#e60000" opacity="0.6" />
+      <path d="M335 255 L345 265 M335 265 L345 255" stroke="#f2f2f2" stroke-width="1" />
+    </g>
+    
+    <!-- Ink splatter accents -->
+    <g fill="#f2f2f2" opacity="0.8">
+      <circle cx="50" cy="50" r="1" />
+      <circle cx="55" cy="48" r="0.7" />
+      <circle cx="52" cy="53" r="0.5" />
+      <circle cx="350" cy="70" r="1" />
+      <circle cx="355" cy="68" r="0.7" />
+      <circle cx="352" cy="73" r="0.5" />
+      <circle cx="100" cy="250" r="1" />
+      <circle cx="105" cy="248" r="0.7" />
+      <circle cx="102" cy="253" r="0.5" />
+    </g>
+  </g>
+</svg> 
