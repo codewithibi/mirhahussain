@@ -287,9 +287,9 @@
                     <span></span>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -367,11 +367,11 @@
                 <h2 class="user-name" id="profile-name"></h2>
                 <p class="user-email" id="profile-email"></p>
                 <div class="profile-actions">
-                    <a href="dashboard.html" class="auth-btn" style="text-decoration: none; display: block; text-align: center; margin-bottom: 1rem;">
+                    <a href="/dashboard" class="auth-btn" style="text-decoration: none; display: block; text-align: center; margin-bottom: 1rem;">
                         <i class="fas fa-tachometer-alt"></i> Go to Dashboard
                     </a>
                     <button id="logout-btn" class="auth-btn">Sign Out</button>
-                    <a href="index.html" class="back-to-home">
+                    <a href="/" class="back-to-home">
                         <i class="fas fa-arrow-left"></i> Back to Home
                     </a>
                 </div>
@@ -462,7 +462,7 @@
                     if (error) throw error;
                     
                     // Redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 } catch (error) {
                     showMessage(`Error: ${error.message}`, 'error');
                 } finally {
@@ -598,7 +598,7 @@
             supabase.auth.onAuthStateChange((event, session) => {
                 if (event === 'SIGNED_IN' && session) {
                     // Redirect to dashboard instead of showing profile
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 } else if (event === 'SIGNED_OUT') {
                     hideUserProfile();
                 }
