@@ -42,16 +42,16 @@
     <section id="chatbot" class="section chatbot">
         <div class="container">
             <h2 class="section-title">Ninja AI Assistant</h2>
+            <div class="info-banner">
+                <p><i class="fas fa-info-circle"></i> To use the chatbot, you'll need to input your Groq API key by typing <code>/key YOUR_API_KEY</code> in the chat. Your key will be stored securely in your browser's session storage.</p>
+                <p><a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Get your Groq API key here</a></p>
+            </div>
             <div class="chatbot-container">
                 <div class="chat-messages" id="chatMessages">
-                    <div class="message bot">
-                        <div class="message-content">
-                            <p>Hello! I'm your Ninja AI Assistant powered by Groq. How can I help you today?</p>
-                        </div>
-                    </div>
+                    <!-- Messages will appear here -->
                 </div>
                 <div class="chat-input">
-                    <textarea id="userInput" placeholder="Type your message here..." rows="2"></textarea>
+                    <textarea id="userInput" placeholder="Type /key YOUR_API_KEY to start or a message..." rows="2"></textarea>
                     <button id="sendButton" class="send-btn">
                         <i class="fas fa-paper-plane"></i>
                     </button>

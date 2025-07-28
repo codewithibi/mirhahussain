@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
     
-    // Groq API key - stored securely
-    const apiKey = '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';
+    // For security reasons, don't hardcode the API key
+    // The API key will be entered by the user or stored server-side in production
+    let apiKey = '';
     
     // Model to use
     const model = 'llama3-70b-8192';
@@ -17,7 +18,29 @@ document.addEventListener('DOMContentLoaded', () => {
             content: 'You are a helpful AI assistant named Ninja AI. You are knowledgeable, friendly, and concise in your responses. You help users with information about martial arts, technology, digital art, and other topics. Always maintain a positive and encouraging tone.'
         }
     ];
-    
+
+    // Function to update UI based on API key status
+    function updateApiKeyStatus() {
+        const infoBanner = document.querySelector('.info-banner');
+        
+        if (apiKey) {
+            if (infoBanner) {
+                infoBanner.classList.add('key-set');
+                const statusMsg = document.createElement('p');
+                statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> API key is set! You can now chat with the AI.';
+                statusMsg.className = 'key-status';
+                
+                // Remove any existing status message
+                const existingStatus = infoBanner.querySelector('.key-status');
+                if (existingStatus) {
+                    existingStatus.remove();
+                }
+                
+                infoBanner.appendChild(statusMsg);
+            }
+        }
+    }
+
     // Function to add messages to the UI
     function addMessage(content, isUser) {
         const messageDiv = document.createElement('div');
@@ -35,6 +58,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Scroll to the bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Check if API key is stored in session
+    if (sessionStorage.getItem('groq_api_key')) {
+        apiKey = sessionStorage.getItem('groq_api_key');
+        // Show a message that API key is set
+        addMessage('API key is set. You can start chatting!', false);
+        updateApiKeyStatus();
+    } else {
+        // Show message asking for API key
+        addMessage('Hello! I\'m your Ninja AI Assistant powered by Groq.', false);
+        addMessage('Please enter your Groq API key to start chatting.', false);
+        addMessage('Type "/key YOUR_API_KEY" to set your API key.', false);
     }
     
     // Function to show typing indicator
@@ -66,9 +102,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Function to handle API key commands
+    function handleCommand(message) {
+        if (message.startsWith('/key ')) {
+            const key = message.substring(5).trim();
+            if (key) {
+                // Store API key in session storage (not visible in code)
+                sessionStorage.setItem('groq_api_key', key);
+                apiKey = key;
+                addMessage('API key set successfully! You can now chat with the Ninja AI.', false);
+                updateApiKeyStatus();
+                return true;
+            }
+        } else if (message === '/clear') {
+            // Clear the chat history except for system message
+            chatHistory = [chatHistory[0]];
+            // Clear the chat messages UI
+            while (chatMessages.firstChild) {
+                chatMessages.removeChild(chatMessages.firstChild);
+            }
+            addMessage('Chat history cleared!', false);
+            return true;
+        } else if (message === '/help') {
+            addMessage('Available commands:', false);
+            addMessage('/key YOUR_API_KEY - Set your Groq API key', false);
+            addMessage('/clear - Clear chat history', false);
+            addMessage('/help - Show this help message', false);
+            return true;
+        }
+        return false;
+    }
+    
     // Function to send message to Groq API
     async function sendMessageToGroq(userMessage) {
         try {
+            // Check if API key is set
+            if (!apiKey) {
+                addMessage('Please set your API key first using "/key YOUR_API_KEY"', false);
+                return;
+            }
+            
             // Add user message to chat history
             chatHistory.push({
                 role: 'user',
@@ -94,7 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.error?.message || 
+                    `HTTP error! Status: ${response.status}`
+                );
             }
             
             const data = await response.json();
@@ -122,7 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
             removeTypingIndicator();
-            addMessage('Sorry, I encountered an error. Please try again later.', false);
+            
+            // More specific error messages
+            if (error.message.includes('invalid_api_key')) {
+                addMessage('Error: Invalid API key. Please check your API key and try again.', false);
+            } else if (error.message.includes('rate_limit_exceeded')) {
+                addMessage('Error: Rate limit exceeded. Please try again later.', false);
+            } else {
+                addMessage(`Error: ${error.message || 'Something went wrong. Please try again.'}`, false);
+            }
         }
     }
     
@@ -132,7 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (message) {
             addMessage(message, true);
             userInput.value = '';
-            sendMessageToGroq(message);
+            
+            // Check if it's a command
+            if (!handleCommand(message)) {
+                sendMessageToGroq(message);
+            }
         }
     });
     
@@ -149,4 +238,4 @@ document.addEventListener('DOMContentLoaded', () => {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 100) + 'px';
     });
-}); 
+});
